@@ -1,0 +1,22 @@
+{
+  "server": {
+    "port": "4000"
+  },
+  "status": {
+    "isWizarded": true
+  },
+  "database": {
+    "mysql": {
+      "host": "localhost",
+      "user": "root",
+      "password": "Tuananhserver2008@",
+      "database": "procloud",
+      "supportBigNumbers": true,
+      "bigNumberStrings": true,
+      "multipleStatements": true,
+      "charset": "utf8mb4_general_ci",
+      "connectionLimit": 1,
+      "username": "root"
+    }
+  }
+}

@@ -1,0 +1,127 @@
+<link rel="stylesheet" href="/assets/css/wizard.css">
+<link rel="stylesheet" href="/assets/vendor/toast/jquery.toast.min.css">
+<link rel="stylesheet" href="/assets/vendor/toast/jquery.toast.css">
+<form action="" method="dialog" class="form" id="forms" onsubmit="submitWizard(this)">
+
+
+    <div class="progressbar">
+        <div class="progress" id="progress"></div>
+
+        <div class="progress-step progress-step-active" data-title="Server"></div>
+        <div class="progress-step" data-title="Database"></div>
+        <div class="progress-step" data-title="Account"></div>
+    </div>
+    <div class="step-forms step-forms-active">
+        <div class="group-inputs">
+            <label for="ID">Port (cổng hoạt động)</label>
+            <input type="text" value="3000" id="port-input" />
+        </div>
+        
+        <div class="">
+            <a href="#" onclick="checkValid('1')" class="btn btn-next width-50 ml-auto">Next</a>
+        </div>
+    </div>
+    <div class="step-forms">
+        <div class="group-inputs">
+            <label for="username">Host</label>
+            <input type="text" value="localhost" name="host" id="db-host-input" />
+        </div>
+        <div class="group-inputs">
+            <label for="username">Port</label>
+            <input type="text" value="3306" name="host" id="db-port-input" />
+        </div>
+        <div class="group-inputs">
+            <label for="username">Table</label>
+            <input type="text" value="procloud" name="host" id="db-table-input" />
+        </div>
+        <div class="group-inputs">
+            <label for="username">Tên người dùng</label>
+            <input type="text" name="username" id="db-username-input" />
+        </div>
+        <div class="group-inputs">
+            <label for="password">Mật khẩu</label>
+            <input type="password" name="password" id="db-password-input" />
+        </div>
+        <div class="btns-group">
+            <a href="#" class="btn btn-prev">Previous</a>
+            <a href="#" onclick="checkValid('2')" class="btn btn-next">Next</a>
+        </div>
+    </div>
+    <div class="step-forms">
+        <div class="group-inputs">
+            <label for="username">Tên người dùng</label>
+            <input type="text" value="admin" name="username" id="username-input" />
+        </div>
+        <div class="group-inputs">
+            <label for="password">Mật khẩu</label>
+            <input type="password" name="password" id="password-input" />
+        </div>
+        <div class="group-inputs">
+            <label for="password">Nhập lại mật khẩu</label>
+            <input type="password" name="password-confilm" id="password-confirm-input" />
+        </div>
+        
+        <div class="btns-group">
+            <a href="#" class="btn btn-prev">Previous</a>
+            <input type="submit" onclick="checkValid('3')" id="submit-form" class="btn" />
+        </div>
+    </div>
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/assets/js/wizard.js"></script>
+<script>
+    function submitWizard(data) {
+
+    }
+</script>
+<script src="/assets/vendor/toast/jquery.toast.min.js"></script>
+<script src="/assets/vendor/toast/jquery.toastin.js"></script>
+<script src="/assets/js/toast.js"></script>
+
+<script>
+    function checkValid(step) {
+        const port = document.getElementById('port-input').value;
+        const db_host = document.getElementById('db-host-input').value;
+        const db_port = document.getElementById('db-port-input').value;
+        const db_table = document.getElementById('db-table-input').value;
+        const db_username = document.getElementById('db-username-input').value;
+        const db_password = document.getElementById('db-password-input').value;
+        const username = document.getElementById('username-input').value;
+        const password = document.getElementById('password-input').value;
+        const passwordcf = document.getElementById('password-confirm-input').value;
+        if (step == "1") {
+            if (!port) return showToast({type: 'error', msg: 'Vui lòng điền port'});
+            return nextStep()
+        } else if (step == "2") {
+            if (!db_host) return showToast({type: 'error', msg: 'Vui lòng điền host'});
+            if (!db_table) return showToast({type: 'error', msg: 'Vui lòng điền table'});
+            if (!db_username) return showToast({type: 'error', msg: 'Vui lòng nhập tên người dùng'});
+            if (!db_password) return showToast({type: 'error', msg: 'Vui lòng nhập mật khẩu'});
+            return nextStep()
+        } else if (step == "3") {
+            if (!username) return showToast({type: 'error', msg: 'Vui lòng nhập tên người dùng'});
+            if (!password) return showToast({type: 'error', msg: 'Vui lòng nhập mật khẩu'});
+            if (!passwordcf) return showToast({type: 'error', msg: 'Vui lòng nhập lại mật khẩu'});
+            if (password !== passwordcf) return showToast({type: 'error', msg: '2 mật khẩu chưa trùng nhau'});
+            $.ajax({
+                url: '/api/wizard',
+                method: 'post',
+                data: {
+                    port,
+                    username,
+                    password,
+                    db_host,
+                    db_table,
+                    db_username,
+                    db_password
+                }
+            }).then(res => {
+                if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+                setTimeout(() => {
+                    return document.location.href = '/';
+                }, 5000)
+            })
+        }
+    }
+</script>
