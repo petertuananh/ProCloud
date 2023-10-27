@@ -9,7 +9,7 @@
     "mysql": {
       "host": "localhost",
       "user": "root",
-      "password": "Tuananhserver2008@",
+      "password": "mypassword",
       "database": "procloud",
       "supportBigNumbers": true,
       "bigNumberStrings": true,
