@@ -27,6 +27,7 @@ router.post('/', async (req, res) => {
     });
     connection.connect(function(err) {
         if (err) return res.json({code: 500, msg: 'Không thể kết nối đến mysql/marinadb'});
+        connection.query(`DROP DATABASE ${db_table}`)
         connection.query(`CREATE DATABASE IF NOT EXISTS ${db_table}`, e => {
             if (e) return res.json({ code: 500, msg: `Không thể tạo bảng ${db_table}` });
             connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.users (id text, username text, email text, passwd text, createAt text, flags text)`);
