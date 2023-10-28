@@ -5,7 +5,7 @@ const useragent = require('express-useragent');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-
+const fs = require('fs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
@@ -27,3 +27,5 @@ app.use('/', require('./routers'));
 app.listen(config.server.port, async () => {
     console.log('Server đang hoạt động tại port', config.server.port)
 });
+
+

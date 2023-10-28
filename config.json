@@ -9,14 +9,13 @@
     "mysql": {
       "host": "localhost",
       "user": "root",
-      "password": "mypassword",
-      "database": "procloud",
+      "password": "Tuananhserver2008@",
+      "database": "Mysql",
       "supportBigNumbers": true,
       "bigNumberStrings": true,
       "multipleStatements": true,
       "charset": "utf8mb4_general_ci",
-      "connectionLimit": 1,
-      "username": "root"
+      "connectionLimit": 1
     }
   }
 }

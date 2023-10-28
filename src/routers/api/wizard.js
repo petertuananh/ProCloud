@@ -31,6 +31,7 @@ router.post('/', async (req, res) => {
             if (e) return res.json({ code: 500, msg: `Không thể tạo bảng ${db_table}` });
             connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.users (id text, username text, email text, passwd text, createAt text, flags text)`);
             connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.user_sessions (id text, userId text, token text, createAt text, expireAt text)`);
+            connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.root_directories (id text, ownerId text, path text, isReadOnly text)`);
             const userId = randomString.generate({ charset: 'numeric', length: 7 })
             const hashedPasswd = crypto.createHmac("sha256", `${userId}-${password}-#@*#&%#%^%#$#`).update(`${userId}-${password}-#@*#&%#%^%#$#`).digest("hex");
             connection.query(`INSERT INTO ${db_table}.users(id, username, email, passwd, createAt, flags) VALUES (${userId}, '${username}', '', '${hashedPasswd}', ${Date.now()}, '["admin"]')`);

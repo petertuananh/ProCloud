@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cài đặt thư mục</title>
+</head>
+<body>
+    <form method="dialog" onsubmit="addDir()">
+        <p>Thêm thư mục đường dẫn</p>
+        <input type="text" id="dir-input">
+        <button type="submit">Thêm</button>
+    </form>
+    <% directories.forEach(directory => {%>
+        <input type="text" value="<%= directory.path %>">
+        <br>
+    <% }) %>
+</body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    function addDir() {
+        const path = document.getElementById('dir-input').value;
+        $.ajax({
+            url: '/api/config/directories',
+            method: 'post',
+            data: {
+                path
+            }
+        }).then(res => {
+            console.log(res)
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            return document.location.reload();
+        });
+    }
+</script>

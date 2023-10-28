@@ -7,6 +7,8 @@
 	<title>Đăng nhập vào ProCloud</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="/assets/css/my-login.css">
+	<link rel="stylesheet" href="/assets/vendor/toast/jquery.toast.min.css">
+	<link rel="stylesheet" href="/assets/vendor/toast/jquery.toast.css">
 </head>
 
 <body class="my-login-page">
@@ -22,8 +24,8 @@
 							<h4 class="card-title">Login</h4>
 							<form method="dialog" onsubmit="login()" class="my-login-validation" novalidate="true">
 								<div class="form-group">
-									<label for="email">Username</label>
-									<input id="email" type="email" class="form-control" name="email" value="" required autofocus>
+									<label for="email">Tên người dùng</label>
+									<input id="username" type="text" class="form-control" name="email" value="" required autofocus>
 									<div class="invalid-feedback">
 										Tên người dùng không hợp lệ
 									</div>
@@ -41,12 +43,12 @@
 							    	</div>
 								</div>
 
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<div class="custom-checkbox custom-control">
 										<input type="checkbox" name="remember" id="remember" class="custom-control-input">
 										<label for="remember" class="custom-control-label">Remember Me</label>
 									</div>
-								</div>
+								</div> -->
 
 								<div class="form-group m-0">
 									<button type="submit" class="btn btn-primary btn-block">
@@ -67,9 +69,30 @@
 		</div>
 	</section>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	<script src="/assets/js/my-login.js"></script>
+	
 </body>
 </html>
+
+<script>
+	function login() {
+		const username = document.getElementById('username').value;
+		const password = document.getElementById('password').value;
+		$.ajax({
+        	url: '/api/auth/login',
+        	method: 'post',
+        	data: {
+				username,
+				password
+        	}
+    	}).then(res => {
+        	if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+        	return document.location.href = res.nextUrl || '/';
+    	});
+	}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="/assets/js/my-login.js"></script>
+<script src="/assets/vendor/toast/jquery.toast.min.js"></script>
+<script src="/assets/vendor/toast/jquery.toast.js"></script>
+<script src="/assets/js/toast.js"></script>
