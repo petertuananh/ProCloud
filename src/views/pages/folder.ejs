@@ -39,17 +39,17 @@
                                         <tr>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Thư mục</th>
                                             <th class="text-secondary opacity-7"></th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Đổi tên</th>
+                                            <th class="text-secondary opacity-7"></th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Xóa</th>
-                                            
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <form method="dialog" onsubmit="addDir()">
-                                                    <p>Thêm thư mục đường dẫn</p>
-                                                    <input type="text" id="dir-input">
-                                                    <button type="submit">Thêm</button>
+                                                <form ref='uploadForm' action='/api/path/upload?path=<%= currentPath %>&return=' method='post' encType="multipart/form-data">
+                                                    <input required type="file" name="sampleFile" />
+                                                    <input type='submit' value='Tải lên' />
                                                 </form>
                                             </td>
                                         </tr>
@@ -68,8 +68,15 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm"></h6>
+                                                            <input value="<%= item %>" onchange="renDir({name: this.value, fileName: '<%= item %>', path: '<%= currentPath %>/<%= item %>'})" type="text">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
                                                         <button onclick="remDir('<%= currentPath %>/<%= item %>')" type="button" class="btn btn-danger btn-sm">Xóa</button>
-
                                                     </div>
 
                                                 </td>
@@ -125,3 +132,32 @@
 <%- include("./partials/_footer.ejs") %>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    function remDir(path) {
+        $.ajax({
+            url: '/api/path/unlink',
+            method: 'post',
+            data: {
+                path
+            }
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            return document.location.reload();
+        });
+    };
+    function renDir(data) {
+        $.ajax({
+            url: '/api/path/rename',
+            method: 'post',
+            data: {
+                path: data.path,
+                fileName: data.fileName,
+                name: data.name
+            }
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            return document.location.reload();
+        });
+    };
+</script>

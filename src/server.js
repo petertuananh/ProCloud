@@ -4,12 +4,14 @@ const config = require('../config.json');
 const useragent = require('express-useragent');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
 const path = require('path');
 const fs = require('fs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
 app.use(useragent.express());
+app.use(fileUpload());
 app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views/pages'));
@@ -37,5 +39,4 @@ app.use(function (req, res, next) {
 app.listen(config.server.port, async () => {
     console.log('Server đang hoạt động tại port', config.server.port)
 });
-
-
+const pm2 = require('pm2');

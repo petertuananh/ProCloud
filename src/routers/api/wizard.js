@@ -6,7 +6,7 @@ const path = require('path');
 const mysql = require('mysql2');
 const crypto = require('crypto');
 const randomString = require('randomstring');
-
+const exec = require('node:child_process').exec;
 const editJsonFile = require("edit-json-file");
 router.post('/', async (req, res) => {
     if (config.status.isWizarded) return res.json({ code: 403, msg: 'Permission denied' });
@@ -27,8 +27,8 @@ router.post('/', async (req, res) => {
     });
     connection.connect(function(err) {
         if (err) return res.json({code: 500, msg: 'Không thể kết nối đến mysql/marinadb'});
-        connection.query(`DROP DATABASE ${db_table}`)
-        connection.query(`CREATE DATABASE IF NOT EXISTS ${db_table}`, e => {
+        // connection.query(`DROP DATABASE ${db_table}`)
+        connection.query(`CREATE DATABASE IF NOT EXISTS ${db_table}`, async e => {
             if (e) return res.json({ code: 500, msg: `Không thể tạo bảng ${db_table}` });
             connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.users (id text, username text, email text, passwd text, createAt text, flags text)`);
             connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.user_sessions (id text, userId text, token text, createAt text, expireAt text)`);
@@ -53,7 +53,10 @@ router.post('/', async (req, res) => {
             // save changes
             configFile.save();
 
-            return res.json({code: 200, msg: 'Đã lưu thay đổi'});
+            await res.json({code: 200, msg: 'Đã lưu thay đổi'});
+            return exec(`pm2 start . -n ProCloud`, function (error, stdout, stderr) {
+                return process.exit()
+            });
         })
     });
 });

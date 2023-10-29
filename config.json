@@ -10,7 +10,7 @@
       "host": "localhost",
       "user": "root",
       "password": "Tuananhserver2008@",
-      "database": "Mysql",
+      "database": "procloud",
       "supportBigNumbers": true,
       "bigNumberStrings": true,
       "multipleStatements": true,
